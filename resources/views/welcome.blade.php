@@ -19,7 +19,10 @@
                   <input type="button" id="rotateleft" value="rotate left">
                   <input type="button" id="rotateright" value="rotate rightt">
         </div>
-             <video autoplay id = "webcam"></video>
+            <div id="RPHTML5Video" style="position: relative; z-index: -1;">
+   <video id="webcam" style="display: none;position:absolute;" autoplay src="">
+   </video>
+  </div>
          <script>
          var stream;
                 var video = document.getElementById("webcam");
@@ -27,19 +30,22 @@
                 var ctx = canvas.getContext('2d');
         
             navigator.webkitGetUserMedia(
-  {video: true, audio: false}, // Options
-  function(localMediaStream) { // Success
-    stream = localMediaStream;
-    video.src = window.webkitURL.createObjectURL(stream);
-  },
-  function(err) { // Failure
-    alert('getUserMedia failed: Code ' + err.code);
-  }
-);
+              {video: true, audio: false}, // Options
+              function(localMediaStream) { // Success
+                stream = localMediaStream;
+                video.src = window.webkitURL.createObjectURL(stream);
+                setInterval(function () {ctx.drawImage(video, 14, 50, 500,550);
+             },20); 
+              },
+              function(err) { // Failure
+                alert('getUserMedia failed: Code ' + err.code);
+              }
+            );
              document.addEventListener('DOMContentLoaded', video);
              document.getElementById("play").addEventListener("click", function(){
             if(video.paused){
                      video.play();
+                     
                      play.innerHTML = 'pause';
                    } else {
                      video.pause();
