@@ -10,7 +10,8 @@
                 <div class="panel-body">
                     Your WEBCAM <br>
                     
-                <canvas id="canvas" width="600" height="600">
+                <canvas id="canvas" width="900" height="700" style = "transform: rotateY(180deg);
+    -webkit-transform:rotateY(180deg)">
                 </canvas>
                     <div id="buttonWrapper">
                  <input type="button" id="play" value="pause">
@@ -20,7 +21,7 @@
                   <input type="button" id="rotateright" value="rotate rightt">
         </div>
             <div id="RPHTML5Video" style="position: relative; z-index: -1;">
-   <video id="webcam" style="display: none;position:absolute;" autoplay src="">
+   <video id="webcam" style="display: none;position:absolute; " autoplay src="" >
    </video>
   </div>
          <script>
@@ -33,8 +34,8 @@
               {video: true, audio: false}, // Options
               function(localMediaStream) { // Success
                 stream = localMediaStream;
-                video.src = window.webkitURL.createObjectURL(stream);
-                setInterval(function () {ctx.drawImage(video, 14, 50, 500,550);
+                video.src = window.URL.createObjectURL(stream);
+                setInterval(function () {ctx.drawImage(video, 50, 50, 800,600);
              },20); 
               },
               function(err) { // Failure
@@ -45,7 +46,7 @@
              document.getElementById("play").addEventListener("click", function(){
             if(video.paused){
                      video.play();
-                     
+
                      play.innerHTML = 'pause';
                    } else {
                      video.pause();
@@ -53,9 +54,38 @@
                    }
 
                 },false);
+                function updateCanvas() {
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.translate(canvas.width * 0.5, canvas.height * 0.5);
+                ctx.rotate(rotate * Math.PI / 180);
+                ctx.scale(zoom, zoom);
+                ctx.translate(-canvas.width * 0.5, -canvas.height * 0.5);
+            }
+             document.getElementById("rotateright").addEventListener("click", function () {
+                rotate = rotate - 5;
+                 updateCanvas();
+
+                }, false);
+              document.getElementById("rotateleft").addEventListener("click", function () {
+                rotate = rotate + 5;
+                 updateCanvas();
+
+                }, false);
+              document.getElementById("plus").addEventListener("click", function () {
+                zoom = zoom + 0.1;
+                 updateCanvas();
+
+                }, false);
+               document.getElementById("minus").addEventListener("click", function () {
+                zoom = zoom - 0.1;
+                 updateCanvas();
+
+                }, false);
              var zoom = 1,
              rotate = 0;
              var i,j,t;
+            
              var properties = ['transform', 'WebkitTransform', 'MozTransform',
                             'msTransform', 'OTransform'],
              prop = properties[0];
@@ -65,31 +95,34 @@
              break;
              }
                }
+               
+            //   document.getElementById("plus").addEventListener("click", function(){
+            //       zoom = zoom + 0.1;
+            //       video.style[prop]='scale('+zoom+') rotate('+rotate+'deg)';
 
-              document.getElementById("plus").addEventListener("click", function(){
-                  zoom = zoom + 0.1;
-                  video.style[prop]='scale('+zoom+') rotate('+rotate+'deg)';
 
+            // },false);  
+              
+            // document.getElementById("minus").addEventListener("click", function(){
+            // zoom = zoom - 0.1;
+            //        video.style[prop]='scale('+zoom+') rotate('+rotate+'deg)';   
 
-            },false);  
-            document.getElementById("minus").addEventListener("click", function(){
-            zoom = zoom - 0.1;
-                   video.style[prop]='scale('+zoom+') rotate('+rotate+'deg)';   
+            //  },false); 
+            
+            //  document.getElementById("rotateleft").addEventListener("click", function(){
+            //  rotate = rotate + 5;
+            //        video.style[prop]='rotate('+rotate+'deg) scale('+zoom+')';   
 
-             },false); 
-             document.getElementById("rotateleft").addEventListener("click", function(){
-             rotate = rotate + 5;
-                   video.style[prop]='rotate('+rotate+'deg) scale('+zoom+')';   
+            //  },false);
+             
+             // document.getElementById("rotateright").addEventListener("click", function(){
+             // rotate = rotate - 5;
+             //       video.style[prop]='rotate('+rotate+'deg) scale('+zoom+')';
 
-             },false);
+             // },false); 
+               
 
-             document.getElementById("rotateright").addEventListener("click", function(){
-             rotate = rotate - 5;
-                   video.style[prop]='rotate('+rotate+'deg) scale('+zoom+')';
-
-             },false);   
-
- </script>
+                </script>
                 </div>
             </div>
         </div>
