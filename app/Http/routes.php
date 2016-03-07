@@ -27,7 +27,9 @@ Route::get('/', function () {
 */
 
 Route::group(['middleware' => ['web']], function () {
-    //
+    Route::get('ceva',function (){
+    	return "Hello World";
+    });
 });
 
 Route::group(['middleware' => 'web'], function () {
