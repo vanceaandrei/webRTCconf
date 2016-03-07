@@ -6,27 +6,92 @@
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
                 <div class="panel-heading">Welcome</div>
-
+@if(Auth::check())
                 <div class="panel-body">
-                    Your Webcam <br>
-                    <video autoplay id = "webcam" style = "transform: rotateY(180deg);
-    -webkit-transform:rotateY(180deg);"></video>
-                    <script type="text/javascript">
-                        var stream;
-                        var video = document.getElementById('webcam');
-                        navigator.webkitGetUserMedia(
-                            {video:true , audio: false}, // Options
-                            function(localMediaStream) { // Success
-                                stream = localMediaStream;
-                                video.src = window.webkitURL.createObjectURL(stream);
-                            },
-                            function(err) { // Failure
-                                alert('getUserMedia failed: Code ' + err.code);
-                            }
-                        );
-                         
-                    </script>
+                    Your WEBCAM <br>
+                    
+                <canvas id="canvas" width="900" height="700" style = "transform: rotateY(180deg);
+    -webkit-transform:rotateY(180deg)">
+                </canvas>
+                    <div id="buttonWrapper">
+                 <input type="button" id="play" value="pause">
+                 <input type="button" id="plus" value="+">
+                 <input type="button" id="minus" value="-">
+                  <input type="button" id="rotateleft" value="rotate left">
+                  <input type="button" id="rotateright" value="rotate rightt">
+        </div>
+            <div id="RPHTML5Video" style="position: relative; z-index: -1;">
+   <video id="webcam" style="display: none;position:absolute; " autoplay src="" >
+   </video>
+  </div>
+         <script>
+         var stream;
+                var video = document.getElementById("webcam");
+                var canvas = document.getElementById("canvas");
+                var ctx = canvas.getContext('2d');
+        
+            navigator.webkitGetUserMedia(
+              {video: true, audio: false}, // Options
+              function(localMediaStream) { // Success
+                stream = localMediaStream;
+                video.src = window.URL.createObjectURL(stream);
+                setInterval(function () {ctx.drawImage(video, 50, 50, 800,600);
+             },20); 
+              },
+              function(err) { // Failure
+                alert('getUserMedia failed: Code ' + err.code);
+              }
+            );
+             document.addEventListener('DOMContentLoaded', video);
+             document.getElementById("play").addEventListener("click", function(){
+            if(video.paused){
+                     video.play();
+                     play.innerHTML = 'pause';
+                   } else {
+                     video.pause();
+                     play.innerHTML = 'play';
+                   }
+                },false);
+                function updateCanvas() {
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.translate(canvas.width * 0.5, canvas.height * 0.5);
+                ctx.rotate(rotate * Math.PI / 180);
+                ctx.scale(zoom, zoom);
+                ctx.translate(-canvas.width * 0.5, -canvas.height * 0.5);
+            }
+             document.getElementById("rotateright").addEventListener("click", function () {
+                rotate = rotate - 5;
+                 updateCanvas();
+                }, false);
+              document.getElementById("rotateleft").addEventListener("click", function () {
+                rotate = rotate + 5;
+                 updateCanvas();
+                }, false);
+              document.getElementById("plus").addEventListener("click", function () {
+                zoom = zoom + 0.1;
+                 updateCanvas();
+                }, false);
+               document.getElementById("minus").addEventListener("click", function () {
+                zoom = zoom - 0.1;
+                 updateCanvas();
+                }, false);
+             var zoom = 1,
+             rotate = 0;
+             var i,j,t;
+            
+             var properties = ['transform', 'WebkitTransform', 'MozTransform',
+                            'msTransform', 'OTransform'],
+             prop = properties[0];
+              for(i=0,j=properties.length;i<j;i++){
+                      if(typeof stage.style[properties[i]] !== 'undefined'){
+                         prop = properties[i];
+             break;
+             }
+               }
+                </script>
                 </div>
+@endif
             </div>
         </div>
     </div>
