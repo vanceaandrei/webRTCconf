@@ -4,16 +4,18 @@
 <div class="container">
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">Dashboard</div>
+            <div class="panel panel-danger">
+                <div class= "panel-heading">Home</div>
             @if(Auth::check())
 
                 <div class="panel-body">
                     You are logged in!
-                    <canvas id="canvas" width="900" height="700" style = "transform: rotateY(180deg);
-                    -webkit-transform:rotateY(180deg)">
+                    <canvas class = "col-md-12  col-xs-12  col-sm-12  col-lg-12"
+                     id="canvas" width="900" height="700" style = "transform: rotateY(180deg);
+                    -webkit-transform:rotateY(180deg);">
                     </canvas>
-                    <div id="buttonWrapper">
+                    <div class = "col-md-12  col-xs-12  col-sm-12  col-lg-12"
+                     id="buttonWrapper">
                         <input type="button" id="play" value="pause">
                         <input type="button" id="plus" value="+">
                         <input type="button" id="minus" value="-">
@@ -28,6 +30,8 @@
                 var video = document.getElementById("webcam");
                 var canvas = document.getElementById("canvas");
                 var ctx = canvas.getContext('2d');
+                var zoom = 1;
+                var rotate = 0;
         
             navigator.webkitGetUserMedia(
               {video: true, audio: false}, // Options
@@ -68,26 +72,17 @@
                  updateCanvas();
                 }, false);
               document.getElementById("plus").addEventListener("click", function () {
-                zoom = zoom + 0.1;
-                 updateCanvas();
+                    if(zoom < 2){
+                        zoom = zoom + 0.1;
+                        updateCanvas();
+                    }  
                 }, false);
                document.getElementById("minus").addEventListener("click", function () {
-                zoom = zoom - 0.1;
-                 updateCanvas();
+                if(zoom > 0.3){
+                    zoom = zoom - 0.1;
+                    updateCanvas();
+                }
                 }, false);
-             var zoom = 1,
-             rotate = 0;
-             var i,j,t;
-            
-             var properties = ['transform', 'WebkitTransform', 'MozTransform',
-                            'msTransform', 'OTransform'],
-             prop = properties[0];
-              for(i=0,j=properties.length;i<j;i++){
-                      if(typeof stage.style[properties[i]] !== 'undefined'){
-                         prop = properties[i];
-             break;
-             }
-               }
             </script>
             @endif
 
